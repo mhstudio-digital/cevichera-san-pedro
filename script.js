@@ -215,12 +215,15 @@
 
     // Map gallery index → { src, caption }
     const photos = {
-      1: { src: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&w=1400&q=90', caption: 'Ceviche Clásico' },
-      2: { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1400&q=90', caption: 'Nuestro Ambiente' },
-      3: { src: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=1400&q=90', caption: 'Camarones al Ajillo' },
-      4: { src: 'https://images.unsplash.com/photo-1498557850523-fd3d118b962e?auto=format&fit=crop&w=1400&q=90', caption: 'Ingredientes Frescos' },
-      5: { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=90', caption: 'Combo Familiar' },
-      6: { src: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=1400&q=90', caption: 'Pescado del Día' },
+      1: { src: 'images/foto1.jpg',  caption: 'Ceviche Clásico' },
+      2: { src: 'images/foto2.jpg',  caption: 'Nuestro Ambiente' },
+      3: { src: 'images/foto3.jpg',  caption: 'Camarones al Ajillo' },
+      4: { src: 'images/foto4.jpg',  caption: 'Ingredientes Frescos' },
+      5: { src: 'images/foto5.jpg',  caption: 'Combo Familiar' },
+      6: { src: 'images/foto6.jpg',  caption: 'Pescado del Día' },
+      7: { src: 'images/foto7.jpg',  caption: 'Salpicón de Mariscos' },
+      8: { src: 'images/foto8.jpg',  caption: 'Arroces de la Casa' },
+      9: { src: 'images/foto9.jpg',  caption: 'Nuestro Ambiente' },
     };
 
     function openLightbox(idx) {
@@ -279,18 +282,44 @@
   })();
 
 
+  /* ─── MENU TABS ─────────────────────────────────────────────── */
+  (function initMenuTabs() {
+    const tabs   = document.querySelectorAll('.menu-tab');
+    const panels = document.querySelectorAll('.menu-panel');
+    if (!tabs.length) return;
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        const target = tab.dataset.tab;
+
+        tabs.forEach(function (t) {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(function (p) { p.classList.remove('active'); });
+
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        const panel = document.getElementById('panel-' + target);
+        if (panel) panel.classList.add('active');
+
+        // Scroll tab into view on mobile
+        tab.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+      });
+    });
+  })();
+
+
   /* ─── MOBILE BANNER ─────────────────────────────────────────── */
   (function initBanner() {
     const banner   = document.getElementById('mobile-banner');
     const closeBtn = document.getElementById('banner-close');
     if (!banner) return;
 
-    const day    = new Date().getDay(); // 0=Sun, 1=Mon
     const textEl = banner.querySelector('.mobile-banner__text');
     if (textEl) {
-      textEl.textContent = day === 1
-        ? 'Abrimos mañana · Mar–Dom 11am–9pm'
-        : 'Abierto hoy · Mar–Dom 11am–9pm';
+      textEl.textContent = 'La Cevichera San Pedro de Barva · Horario: Consultar';
     }
 
     setTimeout(function () { banner.classList.add('visible'); }, 1200);
