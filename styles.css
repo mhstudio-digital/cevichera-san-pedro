@@ -807,6 +807,19 @@ iframe { border: none; }
 
 .menu-card--wide .menu-card__visual { height: 220px; }
 
+/* Real Unsplash photos */
+.menu-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform var(--ease-slow);
+}
+.menu-card:hover .menu-card__img { transform: scale(1.06); }
+.menu-card__badge { position: absolute; z-index: 2; }
+
 .menu-card__visual--clasico {
   background: linear-gradient(135deg,
     #0d2140 0%, #1a4a7a 30%, #2d8a8a 60%, #4ab8a0 80%, #8dd4c0 100%);
@@ -1887,6 +1900,75 @@ iframe { border: none; }
   }
 
   .footer__nav { flex-direction: column; gap: var(--space-8); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE BANNER
+═══════════════════════════════════════════════════════════════ */
+.mobile-banner {
+  display: none;
+  position: fixed;
+  top: var(--navbar-h);
+  left: 0;
+  right: 0;
+  z-index: calc(var(--z-nav) - 1);
+  background: rgba(6, 19, 37, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201, 145, 61, 0.25);
+  transform: translateY(-100%);
+  transition: transform var(--ease-smooth);
+}
+
+.mobile-banner.visible { transform: translateY(0); }
+
+.mobile-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.6rem var(--container-pad);
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.mobile-banner__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #25d366;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(37, 211, 102, 0.6);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.mobile-banner__text {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mobile-banner__close {
+  color: rgba(255, 255, 255, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  cursor: pointer;
+  transition: color var(--ease-fast);
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.mobile-banner__close:hover { color: var(--color-white); }
+
+@media (max-width: 768px) {
+  .mobile-banner { display: block; }
 }
 
 /* ─── Focus states for keyboard navigation ───────────────────── */

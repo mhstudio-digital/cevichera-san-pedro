@@ -104,7 +104,7 @@
         }
       });
     },
-    { threshold: 0.5 }
+    { threshold: 0.15 }
   );
 
   const trustBar = document.querySelector('.trust-bar');
@@ -146,6 +146,49 @@
       ].join(';');
 
       container.appendChild(p);
+    }
+  })();
+
+
+  /* ─── PARALLAX: hero layers ─────────────────────────────────── */
+  (function initParallax() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const heroEl      = document.querySelector('.hero');
+    const heroOcean   = document.querySelector('.hero__ocean');
+    const heroContent = document.querySelector('.hero__content');
+    if (!heroOcean && !heroContent) return;
+
+    window.addEventListener('scroll', function () {
+      const y = window.scrollY;
+      if (heroEl && y > heroEl.offsetHeight) return;
+      if (heroOcean)   heroOcean.style.transform   = 'translateY(' + (y * 0.45) + 'px)';
+      if (heroContent) heroContent.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+    }, { passive: true });
+  })();
+
+
+  /* ─── MOBILE BANNER ─────────────────────────────────────────── */
+  (function initBanner() {
+    const banner   = document.getElementById('mobile-banner');
+    const closeBtn = document.getElementById('banner-close');
+    if (!banner) return;
+
+    const day    = new Date().getDay(); // 0=Sun, 1=Mon
+    const textEl = banner.querySelector('.mobile-banner__text');
+    if (textEl) {
+      textEl.textContent = day === 1
+        ? 'Abrimos mañana · Mar–Dom 11am–9pm'
+        : 'Abierto hoy · Mar–Dom 11am–9pm';
+    }
+
+    setTimeout(function () { banner.classList.add('visible'); }, 1200);
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        banner.style.transform = 'translateY(-100%)';
+        setTimeout(function () { banner.style.display = 'none'; }, 350);
+      });
     }
   })();
 
