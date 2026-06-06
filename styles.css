@@ -631,7 +631,7 @@ iframe { border: none; }
 ═══════════════════════════════════════════════════════════════ */
 .trust-bar {
   background: var(--bg-navy);
-  padding: var(--space-12) var(--container-pad) calc(var(--space-14) + 40px);
+  padding: var(--space-12) var(--container-pad) calc(var(--space-20) + 40px);
 }
 
 .trust-bar__container {
