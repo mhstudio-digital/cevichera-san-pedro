@@ -141,12 +141,123 @@
         'animation-delay:'     + delay + 's',
         'opacity: 0',
         'background: ' + (Math.random() > 0.6
-          ? 'rgba(201,145,61,0.18)'
-          : 'rgba(74,159,212,0.15)')
+          ? 'rgba(201,168,76,0.18)'
+          : 'rgba(26,58,92,0.25)')
       ].join(';');
 
       container.appendChild(p);
     }
+  })();
+
+
+  /* ─── CUSTOM CURSOR ─────────────────────────────────────────── */
+  (function initCursor() {
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursor-ring');
+    if (!cursor || !ring) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    let mx = -100, my = -100, rx = -100, ry = -100;
+    let raf;
+
+    document.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    function smoothRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      raf = requestAnimationFrame(smoothRing);
+    }
+    smoothRing();
+
+    // Hover states on interactive elements
+    const interactive = 'a, button, [role="button"], .menu-card, .gallery-item, .why-card, .testimonial-card';
+
+    document.addEventListener('mouseover', function (e) {
+      if (e.target.closest(interactive)) {
+        cursor.classList.add('cursor--hover');
+        ring.classList.add('cursor-ring--hover');
+      }
+    });
+
+    document.addEventListener('mouseout', function (e) {
+      if (e.target.closest(interactive)) {
+        cursor.classList.remove('cursor--hover');
+        ring.classList.remove('cursor-ring--hover');
+      }
+    });
+
+    document.addEventListener('mouseleave', function () {
+      cursor.classList.add('cursor--hidden');
+      ring.classList.add('cursor-ring--hidden');
+    });
+
+    document.addEventListener('mouseenter', function () {
+      cursor.classList.remove('cursor--hidden');
+      ring.classList.remove('cursor-ring--hidden');
+    });
+  })();
+
+
+  /* ─── LIGHTBOX ───────────────────────────────────────────────── */
+  (function initLightbox() {
+    const lightbox   = document.getElementById('lightbox');
+    const lbImg      = document.getElementById('lightbox-img');
+    const lbCaption  = document.getElementById('lightbox-caption');
+    const lbClose    = document.getElementById('lightbox-close');
+    const lbBackdrop = document.getElementById('lightbox-backdrop');
+    if (!lightbox || !lbImg) return;
+
+    // Map gallery index → { src, caption }
+    const photos = {
+      1: { src: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&w=1400&q=90', caption: 'Ceviche Clásico' },
+      2: { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1400&q=90', caption: 'Nuestro Ambiente' },
+      3: { src: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=1400&q=90', caption: 'Camarones al Ajillo' },
+      4: { src: 'https://images.unsplash.com/photo-1498557850523-fd3d118b962e?auto=format&fit=crop&w=1400&q=90', caption: 'Ingredientes Frescos' },
+      5: { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=90', caption: 'Combo Familiar' },
+      6: { src: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=1400&q=90', caption: 'Pescado del Día' },
+    };
+
+    function openLightbox(idx) {
+      const photo = photos[idx];
+      if (!photo) return;
+      lbImg.src = photo.src;
+      lbImg.alt = photo.caption;
+      if (lbCaption) lbCaption.textContent = photo.caption;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(function () { lbImg.src = ''; }, 300);
+    }
+
+    // Attach click to each gallery item
+    document.querySelectorAll('.gallery-item').forEach(function (item, i) {
+      item.setAttribute('tabindex', '0');
+      item.style.cursor = 'none';
+      function open() { openLightbox(i + 1); }
+      item.addEventListener('click', open);
+      item.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      });
+    });
+
+    if (lbClose) lbClose.addEventListener('click', closeLightbox);
+    if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+    });
   })();
 
 
