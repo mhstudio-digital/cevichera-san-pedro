@@ -458,13 +458,13 @@ iframe { border: none; }
 ═══════════════════════════════════════════════════════════════ */
 .hero {
   position: relative;
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: calc(var(--navbar-h) + var(--space-16)) var(--container-pad) var(--space-20);
+  padding: var(--navbar-h) var(--container-pad) var(--space-8);
   background:
     linear-gradient(rgba(13, 27, 62, 0.72), rgba(8, 16, 40, 0.80)),
     url('images/foto1.jpg') center / cover no-repeat;
